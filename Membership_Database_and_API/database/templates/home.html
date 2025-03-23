@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | NHCC{% endblock %}
+{% load static %}
+{% block content %}
+<!-- Hero Section -->
+<div class="card text-center mx-auto pt-5" style="max-width: 80%; margin-top: 3rem;"> 
+    <div class="card-body">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <span>{{ message }}</span></div>
+        {% endfor %}
+        {% endif %}
+        <h1 class="fw-bold">Welcome to the Nigerian-Hungarian Chamber of Commerce (NHCC)</h1>
+        <h3 class="fw-semibold mt-3">Fostering Stronger Trade and Investment Ties Between Nigeria & Hungary.</h3>
+    </div>
+</div>
+
+<!-- About NHCC Section -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">About NHCC</h2>
+        <p class="mt-3 text-muted">
+            The Nigerian-Hungarian Chamber of Commerce (NHCC) serves as a bridge between businesses and stakeholders in Nigeria and Hungary.
+            Our mission is to facilitate trade, investment, and partnerships that foster economic growth and innovation.
+        </p>
+        <a href="https://ngrhucc.org/" target="_blank" class="btn btn-success btn-lg rounded-pill shadow">Read More</a>
+    </div>
+</section>
+
+<!-- Our Services -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center">Our Services</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h4 class="fw-semibold">Business Networking</h4>
+                        <p class="text-muted">We connect businesses and entrepreneurs from Nigeria and Hungary for mutually beneficial partnerships.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h4 class="fw-semibold">Investment Support</h4>
+                        <p class="text-muted">Guidance and assistance for companies looking to invest in Nigeria or Hungary.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h4 class="fw-semibold">Trade Facilitation</h4>
+                        <p class="text-muted">Helping businesses navigate regulations and expand their international trade opportunities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Membership Benefits -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">Why Join NHCC?</h2>
+        <p class="mt-3 text-muted">
+            Our members enjoy exclusive access to networking events, trade fairs, investment opportunities, and business advisory services.
+        </p>
+        <a href="https://ngrhucc.org/", target="_blank" class="btn btn-lg rounded-pill shadow mt-3" style="color: whitesmoke; background-color: rgb(239, 49, 49); font-weight: bold;">Become a Member</a>
+    </div>
+</section>
+
+<!-- Recent Events -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center">Recent Events</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/nhcc_image_1.jpeg'%}" class="card-img-top" alt="Event 1" height="250px">
+                    <div class="card-body">
+                        <h5 class="fw-semibold">Trade Fair 2025</h5>
+                        <p class="text-muted">NHCC hosted a major trade fair connecting businesses across Nigeria and Hungary.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/nhcc_image_2.jpeg'%}" class="card-img-top" alt="Event 2" height="250px">
+                    <div class="card-body">
+                        <h5 class="fw-semibold">Business Forum</h5>
+                        <p class="text-muted">An interactive session featuring top business leaders from both nations.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <img src="{% static 'images/nhcc_image_3.png'%}" class="card-img-top" alt="Event 3" height="250px">
+                    <div class="card-body">
+                        <h5 class="fw-semibold">Investment Summit</h5>
+                        <p class="text-muted">Discussing key investment opportunities in Nigeria and Hungary.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="fw-bold">Get in Touch</h2>
+        <p class="mt-3 text-muted">Have questions or need business support? Reach out to us.</p>
+        <a href="https://ngrhucc.org/contact.html" class="btn btn-success btn-lg rounded-pill shadow">Contact Us</a>
+    </div>
+</section>
+
+{% endblock %}

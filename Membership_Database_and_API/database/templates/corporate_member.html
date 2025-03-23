@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    textarea {
+        height: 80px;  /* Fixed height */
+        resize: none;  /* Prevent stretching */
+    }
+</style>
+<div class="container mt-5">
+    <!-- Organization Logo -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 bg-light p-4 shadow rounded">
+            <div class="text-center">
+                <img src="{% static 'images/nhcc_logo.png' %}" alt="NHCC Logo" class="img-fluid" style="max-width: 150px;">
+            </div>
+            <h2 class="text-center mb-4">Corporate Member Registration</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Text Inputs (Labels Above) -->
+                <div class="mb-3">
+                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+                    {{ form.address }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.phonenumber.id_for_label }}" class="form-label">Phone Number</label>
+                    {{ form.phonenumber }}
+                </div>
+
+                <!-- Choice Fields (Dropdowns) -->
+                <div class="mb-3">
+                    <label for="{{ form.gender.id_for_label }}" class="form-label">Gender</label>
+                    {{ form.gender }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.nationality.id_for_label }}" class="form-label">Nationality</label>
+                    {{ form.nationality }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.company_name.id_for_label }}" class="form-label">Company Name</label>
+                    {{ form.company_name }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.core_line_of_business.id_for_label }}" class="form-label">Core Line of Business</label>
+                    {{ form.core_line_of_business }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.company_interest_in_hungary.id_for_label }}" class="form-label">Company Interest in Hungary</label>
+                    {{ form.company_interest_in_hungary }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.company_location.id_for_label }}" class="form-label">Company Location</label>
+                    {{ form.company_location }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.position_in_company.id_for_label }}" class="form-label">Position in Company</label>
+                    {{ form.position_in_company }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.date_of_establishment.id_for_label }}" class="form-label">Date of Establishment</label>
+                    {{ form.date_of_establishment }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.reg_no.id_for_label }}" class="form-label">Registration Number</label>
+                    {{ form.reg_no }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.profile_photo.id_for_label }}" class="form-label">Profile Photo</label>
+                    {{ form.profile_photo }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.sponsor.id_for_label }}" class="form-label">Sponsor</label>
+                    {{ form.sponsor }}
+                </div>
+
+                <!-- Agreement Checkbox -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="agree_terms" name="agree_terms">
+                    <label class="form-check-label" for="agree_terms">
+                        We wish to be admitted members of the Nigerian-Hungarian chamber of Commerce, and if admitted we agree to be bound by the Constitution, the Memorandum and Articles of Association and the Bye-Laws of the Association. We will pay the annual fee at the rate in force for the time being, and hereby declare that all statements made by us on this application form are correct.
+                    </label>
+                    <div id="agree_error" class="text-danger mt-2" style="display: none;">
+                        You must agree to the terms before submitting.
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn w-100" style="background-color: #0e330f; color: white;">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        let agreeCheckbox = document.getElementById("agree_terms");
+        let errorMessage = document.getElementById("agree_error");
+    
+        if (!agreeCheckbox.checked) {
+            event.preventDefault(); // Stop form submission
+            errorMessage.style.display = "block"; // Show error message
+        } else {
+            errorMessage.style.display = "none"; // Hide error if checked
+        }
+    });
+</script>
+    
+{% endblock %}

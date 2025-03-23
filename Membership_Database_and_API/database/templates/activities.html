@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% for staff in staffs%}
+        {% if staff.profile_photo %}
+            <p>Profile</p>
+            <img src="{{staff.profile_photo.url }}" alt="Profile Photo"/>
+        {% endif %}
+        {% endfor %}
