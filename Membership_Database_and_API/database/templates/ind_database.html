@@ -1,37 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-<div class="container mt-5 d-flex justify-content-center">
-    <div class="col-lg-8 col-md-10 mx-auto bg-light shadow-sm rounded p-4">
-        
-        <div class="text-center mb-4">
-            <img src="{% static 'images/nhcc_logo.png' %}" alt="NHCC Logo" class="img-fluid" style="max-width: 150px;">
-        </div>
-        <div class="row align-items-center text-center">
-            <!-- Profile Picture (Top for Small Screens, Left for Larger Screens) -->
-            <div class="col-md-4 mb-3">
-                {% if member.profile_photo %}
-                    <img src="{{ member.profile_photo.url }}" alt="Profile Photo" class="img-fluid rounded" style="max-width: 200px; height: 200px; object-fit: cover;">
-                {% else %}
-                    <img src="{% static 'images/default_profile.png' %}" alt="Default Profile" class="img-fluid rounded" style="max-width: 200px; height: 200px; object-fit: cover;">
-                {% endif %}
-            </div>
+{% block title %}Individual Members Database{% endblock %}
 
-            <!-- Member Details -->
-            <div class="col-md-8">
-                <h4 class="fw-bold">{{ member.first_name }} {{ member.last_name }}</h4>
-                <p><strong>Email:</strong> {{ member.email }}</p>
-                <p><strong>Phone:</strong> {{ member.phonenumber }}</p>
-                <p><strong>Address:</strong> {{ member.address }}</p>
-                <p><strong>Gender:</strong> {{ member.get_gender_display }}</p>
-                <p><strong>Nationality:</strong> {{ member.get_nationality_display }}</p>
-                <p><strong>Profession:</strong> {{ member.get_profession_display }}</p>
-                <p><strong>Title:</strong> {{ member.get_title_display }}</p>
-                <p><strong>Sponsor:</strong> {{ member.sponsor }}</p>
-                <p><strong>Date Joined:</strong> {{ member.date_joined }}</p>
-            </div>
-        </div>
+{% block content %}
+<div class="container mt-3">
+    <h2 class="text-center mb-4">Individual Members</h2>
+    
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Profession</th>
+                    <th>Gender</th>
+                    <th>Sponsor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'ind_detail' member.id %}" style="text-decoration: none;">{{ member.first_name }}</a></td>
+                    <td>{{ member.last_name }}</td>
+                    <td>{{ member.profession }}</td>
+                    <td>{{ member.gender }}</td>
+                    <td>{{ member.sponsor }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No members added yet!</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

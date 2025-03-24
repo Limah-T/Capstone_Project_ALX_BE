@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
-from .models import Staff, IndividualMember
+from .models import Staff, IndividualMember, CooperateMember, Director
 from .forms import LoginForm, IndividualForm, CooperateForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import generic
 
 def home(request):
     return render(request, 'home.html')
@@ -35,7 +36,7 @@ class LoginView(FormView):
         messages.error(self.request, "Invalid email address")
         return redirect(reverse_lazy('login_view'))
 
-# Individual Form   
+# Individual Form View (CBV)
 class IndividualView(FormView):
     template_name = 'individual_member.html'
     form_class = IndividualForm
@@ -47,7 +48,7 @@ class IndividualView(FormView):
             form.save()
         return HttpResponse("Form submitted sucessfully")
     
-# Cooperate View
+# Cooperate Form View(CBV)
 class CooperateView(FormView):
     template_name = 'corporate_member.html'
     form_class = CooperateForm
@@ -57,15 +58,6 @@ class CooperateView(FormView):
         if form.is_valid():
             print(form.cleaned_data.get('first_name'))
         return HttpResponse("Form submitted sucessfully")
-
-
-def cooperate_view(request):
-    if request.method == 'POST':
-        form = CooperateForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return HttpResponse("Form submitted sucessfully")
-    return render(request, 'individual_member.html', {'form': form})
         
 @login_required
 def logoutview(request):
@@ -73,11 +65,53 @@ def logoutview(request):
     print("Logged user out successfully")
     return redirect(reverse_lazy('home'))
 
-def check_ind(request, pk):
-    individual_member = IndividualMember.objects.get(id=pk)
-    return render(request, 'ind_database.html', {'member': individual_member})
+# Class Based view for individual list view
+class IndividualDataBaseView(generic.ListView):
+    model = IndividualMember
+    template_name = 'ind_database.html'
+    context_object_name = 'members'
+    ordering = 'first_name'
 
+# Class Based view for individual detail view
+class IndividualDetailView(generic.DetailView):
+    model = IndividualMember
+    template_name = 'ind_detail_view.html'
+    context_object_name = 'member'
 
-   
+# Class Based view for corporate list view
+class CorporateDatabaseView(generic.ListView):
+    model = CooperateMember
+    template_name = 'cop_database.html'
+    context_object_name = 'members'
+    ordering = 'first_name'
 
+# Class Based view for corporate detail view
+class CorporateDetailView(generic.DetailView):
+    model = CooperateMember
+    template_name = 'cop_detail_view.html'
+    context_object_name = 'member'
+    
+# Class Based view for staff list view
+class StaffDatabaseView(generic.ListView):
+    model = Staff
+    template_name = 'staff_database.html'
+    context_object_name = 'all_staff'
+    ordering = 'first_name'
 
+# Class Based View for staff detail view
+class StaffDetailView(generic.DetailView):
+    model = Staff
+    template_name = 'staff_detail_view.html'
+    context_object_name = 'staff'
+
+# Class Based View for director list view
+class DirectorDatabaseView(generic.ListView):
+    model = Director
+    template_name = 'bod_database.html'
+    context_object_name = 'directors'
+
+# Class Based View for director detail view
+class DirectorDetailView(generic.DetailView):
+    model = Director
+    template_name = 'bod_detail_view.html'
+    context_object_name = 'director'

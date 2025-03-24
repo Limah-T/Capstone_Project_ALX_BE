@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-3">
-    <h2 class="text-center mb-4">Corporate Members</h2>
+    <h2 class="text-center mb-4">Directors</h2>
     
     <div class="table-responsive shadow-sm">
         <table class="table table-bordered table-striped">
@@ -15,21 +15,19 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Gender</th>
-                    <th>Company Name</th>
+                    <th>Nationality</th>
                     <th>Position</th>
-                    <th>Sponsor</th>
                 </tr>
             </thead>
             <tbody>
-                {% for member in members %}
+                {% for director in directors %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td><a href="{% url 'cop_detail' member.id %}" style="text-decoration: none;">{{ member.first_name }}</a></td>
-                    <td>{{ member.last_name }}</td> 
-                    <td>{{ member.gender }}</td>   
-                    <td>{{ member.company_name}}</td>
-                    <td>{{ member.position_in_company }}</td>
-                    <td>{{ member.sponsor }}</td>
+                    <td><a href="{% url 'director_view' director.id %}" style="text-decoration: none;">{{ director.first_name }}</a></td>
+                    <td>{{ director.last_name }}</td> 
+                    <td>{{ director.gender }}</td> 
+                    <td>{{ director.get_nationality_display }}</td>   
+                    <td>{{ director.position_in_chambers }}</td>
                 </tr>
                 {% empty %}
                 <tr>

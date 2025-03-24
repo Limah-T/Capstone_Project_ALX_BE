@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="col-lg-8 col-md-10 mx-auto bg-white shadow-lg rounded p-4">
+
+        <!-- Logo Section -->
+        <div class="text-center mb-3">
+            <img src="{% static 'images/nhcc_logo.png' %}" alt="NHCC Logo" class="img-fluid" style="max-width: 140px;">
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Profile Picture (Larger Screens: Left | Small Screens: Centered) -->
+            <div class="col-md-4 text-center mb-3">
+                {% if director.profile_photo %}
+                    <img src="{{ director.profile_photo.url }}" alt="Profile Photo" class="img-fluid rounded shadow" 
+                         style="width: 180px; height: 300px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}" alt="Default Profile" class="img-fluid rounded shadow"
+                         style="width: 180px; height: 180px; object-fit: cover;">
+                {% endif %}
+            </div>
+
+            <!-- director Details (Text-Aligned for Readability) -->
+            <div class="col-md-8">
+                <h4 class="fw-bold">{{ director.first_name }} {{ director.last_name }}</h4>
+                <hr class="mb-2">
+                <div class="text-muted">
+                    <p><strong>Email:</strong> {{ director.email }}</p>
+                    <p><strong>Phone:</strong> {{ director.phonenumber }}</p>
+                    <p><strong>Address:</strong> {{ director.address }}</p>
+                    <p><strong>Gender:</strong> {{ director.get_gender_display }}</p>
+                    <p><strong>Nationality:</strong> {{ director.get_nationality_display }}</p>
+                    <p><strong>Title:</strong> {{ director.get_title_display }}</p>
+                    <p><strong>Profession:</strong> {{ director.get_profession_display }}</p>
+                    <p><strong>Position in the Chambers:</strong> {{ director.get_position_in_chambers_display }}</p>
+                    <p><strong>Core line of Business:</strong> {{ director.get_nature_of_business_display }}</p>
+                    <p><strong>Company Location:</strong> {{ director.company_location }}</p>
+                    <p><strong>Position in Company:</strong> {{ director.position_in_company }}</p>
+                    <p><strong>Date of Establishment:</strong> {{ director.date_of_establishment }}</p>
+                    <p><strong>Date Joined:</strong> {{ director.date_joined }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

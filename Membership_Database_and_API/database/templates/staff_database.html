@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Corporate Members{% endblock %}
+{% block title %}Staff Members Database{% endblock %}
 
 {% block content %}
 <div class="container mt-3">
-    <h2 class="text-center mb-4">Corporate Members</h2>
+    <h2 class="text-center mb-4">Staff</h2>
     
     <div class="table-responsive shadow-sm">
         <table class="table table-bordered table-striped">
@@ -15,21 +15,18 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Gender</th>
-                    <th>Company Name</th>
-                    <th>Position</th>
-                    <th>Sponsor</th>
+                    <th>Department</th>  
                 </tr>
             </thead>
             <tbody>
-                {% for member in members %}
+                {% for staff in all_staff %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td><a href="{% url 'cop_detail' member.id %}" style="text-decoration: none;">{{ member.first_name }}</a></td>
-                    <td>{{ member.last_name }}</td> 
-                    <td>{{ member.gender }}</td>   
-                    <td>{{ member.company_name}}</td>
-                    <td>{{ member.position_in_company }}</td>
-                    <td>{{ member.sponsor }}</td>
+                    <td><a href="{% url 'staff_detail' staff.id %}" style="text-decoration: none;">{{ staff.first_name }}</a></td>
+                    <td>{{ staff.last_name }}</td>
+                    <td>{{ staff.gender }}</td>
+                    <td>{{ staff.get_position_display }}</td>
+                    
                 </tr>
                 {% empty %}
                 <tr>

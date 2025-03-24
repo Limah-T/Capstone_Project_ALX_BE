@@ -57,8 +57,8 @@ class Staff(models.Model):
     gender = models.CharField(max_length=7, choices=GENDER, error_messages={'required': 'Gender cannot be empty!'}, null=False, blank=False)
     nationality = models.CharField(max_length=100,choices=NATIONALITIES, default=NATIONALITIES[0], error_messages= {'required': 'Nationality cannot be empty!'}, 
                                    null=False, blank=False)
-    position = models.CharField(max_length=25, choices=STAFF_POSITIONS, error_messages={'required': 'Position cannot be empty!'}, null=False, blank=False)
-    account_number = models.IntegerField(error_messages={'required': 'Account number cannot be empty!'}, null=False, blank=False)
+    position = models.CharField(max_length=100, choices=STAFF_POSITIONS, error_messages={'required': 'Position cannot be empty!'}, null=False, blank=False)
+    account_number = models.IntegerField(error_messages={'required': 'Account number cannot be empty!'}, null=False, blank=False, unique=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
     date_employed = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
@@ -124,7 +124,7 @@ class Director(models.Model):
     profession = models.CharField(max_length=100, choices=PROFESSIONS, error_messages={'required': 'Profession cannot be empty!'}, 
                                    null=True, blank=True)
     
-    position_in_chambers = models.CharField(max_length=25, choices=DIRECTOR_POSITIONS, error_messages={'required': 'Position cannot be empty!'}, null=False, blank=False)
+    position_in_chambers = models.CharField(max_length=100, choices=DIRECTOR_POSITIONS, error_messages={'required': 'Position cannot be empty!'}, null=False, blank=False)
     company_name = models.CharField(max_length=150, error_messages={'required': 'Company name cannot be empty!'}, 
                                     null=True, blank=True)
     nature_of_business = models.CharField(max_length=150, choices=NATURE_OF_BUSINESS, error_messages={

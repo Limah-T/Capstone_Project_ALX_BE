@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="col-lg-8 col-md-10 mx-auto bg-white shadow-lg rounded p-4">
+
+        <!-- Logo Section -->
+        <div class="text-center mb-3">
+            <img src="{% static 'images/nhcc_logo.png' %}" alt="NHCC Logo" class="img-fluid" style="max-width: 140px;">
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Profile Picture (Larger Screens: Left | Small Screens: Centered) -->
+            <div class="col-md-4 text-center mb-3">
+                {% if staff.profile_photo %}
+                    <img src="{{ staff.profile_photo.url }}" alt="Profile Photo" class="img-fluid rounded shadow" 
+                         style="width: 180px; height: 300px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}" alt="Default Profile" class="img-fluid rounded shadow"
+                         style="width: 180px; height: 180px; object-fit: cover;">
+                {% endif %}
+            </div>
+
+            <!-- Member Details (Text-Aligned for Readability) -->
+            <div class="col-md-8">
+                <h4 class="fw-bold ">{{ staff.first_name }} {{ staff.last_name }}</h4>
+                <hr class="mb-2">
+                <div class="text-muted">
+                    <p><strong>Email:</strong> {{ staff.email }}</p>
+                    <p><strong>Phone:</strong> {{ staff.phonenumber }}</p>
+                    <p><strong>Address:</strong> {{ staff.address }}</p>
+                    <p><strong>Gender:</strong> {{ staff.get_gender_display }}</p>
+                    <p><strong>Nationality:</strong> {{ staff.get_nationality_display }}</p>
+                    <p><strong>Department:</strong> {{ staff.get_position_display }}</p>
+                    <p><strong>Account Number:</strong> {{ staff.account_number }}</p>
+                    <p><strong>Date Employed:</strong> {{ staff.date_employed }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

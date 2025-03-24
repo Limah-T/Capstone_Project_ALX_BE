@@ -11,7 +11,7 @@ class CustomUserAdmin(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'email', 'phonenumber', 'position', 'gender', 'account_number']
     list_filter = ['position']
-    search_fields = ['firstname', 'email', 'phonenumber']
+    search_fields = ['first_name', 'email', 'phonenumber']
 
 @admin.register(Director)
 class DirectorAdmin(admin.ModelAdmin):

@@ -1,11 +1,15 @@
-
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.454), rgba(0, 0, 0, 0.877)), 
+                url("/static/images/hero-bg.jpg") center/cover no-repeat;
+    height: 60vh;
+}
 
 .header-section nav{
-    background-color: rgb(63, 90, 73) !important;
+    background-color: rgb(80, 82, 80) !important;
 }
 
 .header-section nav a span {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-family:'Times New Roman', Times, serif;
     letter-spacing: 0px;
     cursor: not-allowed;
@@ -17,14 +21,43 @@
 }
 
 .nav-item a:focus, .nav-item a:hover {
-    color: lightgreen;
-}
-
-.database-records {
-    background-color: rgb(45, 60, 45);
+    font-weight: 500;
     color: whitesmoke;
 }
-
-.database-records:hover, .database-records:focus {
-    color: rgb(45, 60, 45);
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: gray;
 }
+
+@media (max-width: 576px) { 
+    /* Ensure navbar items align left */
+    .navbar-nav {
+        text-align: left;
+    }
+
+    /* Ensure nav-items stretch full width */
+    .nav-item {
+        width: 100%;
+        display: block;
+    }
+
+    /* Fix button styling to match links */
+    .nav-item .btn {
+        width: 100%; /* Make it as wide as other links */
+        display: block;
+        text-align: left;
+        color: whitesmoke; /* Same color as other nav links */
+        background: none;
+        border: none;
+        padding-left: 16px; /* Adjust to match other links */
+        font-size: 1.2rem; /* Match text size */
+    }
+
+    /* Ensure all links inside navbar are left-aligned */
+    .navbar-nav .nav-link {
+        text-align: left;
+        padding-left: 25px; /* Adjust left padding */
+    }
+}
+
+
+
