@@ -30,7 +30,7 @@ class RegisterAPI(GenericAPIView, CreateModelMixin): # CMM for post request
         # make_password will turn the plain password into a harsh for database 
         password = make_password(serializer.validated_data['password'])
         user = CustomUser.objects.create(username=username, email=email, password=password, is_active=False)
-        token, created = Token.objects.get_or_create(user=user)
+        token, _ = Token.objects.get_or_create(user=user)
         print(token)
         return Response(data={'token':token.key}, status=status.HTTP_201_CREATED)
 
