@@ -18,8 +18,7 @@ class LoginForm(forms.Form):
 class IndividualForm(forms.ModelForm):
     class Meta:
         model = IndividualMember
-        fields = "__all__"
-        exclude = ['is_active', 'past']
+        exclude = ['is_active', 'past', 'creator']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -31,14 +30,11 @@ class IndividualForm(forms.ModelForm):
             else:  # For text, email, file, etc.
                 field.widget.attrs.update({'class': 'form-control'})
 
-class CooperateForm(forms.ModelForm):
+class CorporateForm(forms.ModelForm):
     date_of_establishment = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
     class Meta:
         model = CorporateMember
-        fields = "__all__"
-        exclude = ['is_active', 'past']
-
-
+        exclude = ['is_active', 'past', 'creator']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

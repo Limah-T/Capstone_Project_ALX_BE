@@ -24,7 +24,7 @@
 
             <!-- Member Details (Text-Aligned for Readability) -->
             <div class="col-md-8">
-                <h4 class="fw-bold ">{{ member.first_name }} {{ member.last_name }}</h4>
+                <h4 class="fw-bold ">{{member.title}}. {{ member.first_name }} {{ member.last_name }}</h4>
                 <hr class="mb-2">
                 <div class="text-muted">
                     <p><strong>Email:</strong> {{ member.email }}</p>
@@ -33,7 +33,8 @@
                     <p><strong>Gender:</strong> {{ member.get_gender_display }}</p>
                     <p><strong>Nationality:</strong> {{ member.get_nationality_display }}</p>
                     <p><strong>Title:</strong> {{ member.get_title_display }}</p>
-                    <p><strong>Profession:</strong> {{ member.get_profession_display }}</p>
+                    <p><strong>Date of Establishment:</strong> {{ member.date_of_establishment }}</p>
+                    <p><strong>Company name:</strong> {{member.company_name}}</p>
                     <p><strong>Sponsor:</strong> {{ member.sponsor }}</p>
                     <p><strong>Date Joined:</strong> {{ member.date_joined }}</p>
                 </div>

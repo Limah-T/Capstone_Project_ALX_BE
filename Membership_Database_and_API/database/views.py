@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
-from .models import Staff, IndividualMember, CorporateMember, Director
-from .forms import LoginForm, IndividualForm, CooperateForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import generic
+from django.shortcuts import get_object_or_404
+from .models import Staff, IndividualMember, CorporateMember, Director, CustomUser
+from .forms import LoginForm, IndividualForm, CorporateForm
 
 def home(request):
     return render(request, 'home.html')
@@ -25,11 +25,9 @@ class LoginView(FormView):
         if form.is_valid():
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get("password")
-            print(email, password)
             user = authenticate(self.request, email=email, password=password)
             if user:
                 login(request, user)
-                print("Logged user in successfully")
                 messages.success(self.request, 'Logged In')   
                 return super().post(request, *args, **kwargs)          
             messages.error(self.request, 'Email or Password is Incorrect!')
@@ -37,27 +35,77 @@ class LoginView(FormView):
         return redirect(reverse_lazy('login_view'))
 
 # Individual Form View (CBV)
-class IndividualView(FormView):
+class IndividualView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.change_individualmember"
+    permission_denied_message = "You do not have permission to view the form page!"
     template_name = 'individual_member.html'
     form_class = IndividualForm
+    success_url = reverse_lazy('home')
 
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            print(form.cleaned_data.get('first_name'))
-            form.save()
-        return HttpResponse("Form submitted sucessfully")
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
     
-# Cooperate Form View(CBV)
-class CooperateView(FormView):
-    template_name = 'corporate_member.html'
-    form_class = CooperateForm
-
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            print(form.cleaned_data.get('first_name'))
-        return HttpResponse("Form submitted sucessfully")
+            email = form.cleaned_data['email']
+            phonenumber = form.cleaned_data['phonenumber']
+            sponsor = form.cleaned_data['sponsor']
+            profile_photo = form.cleaned_data['profile_photo']
+            current_user = get_object_or_404(CustomUser, id=request.user.id)
+            print(current_user)
+            form.cleaned_data['creator_id'] = current_user.id
+            creator = form.cleaned_data['creator_id']
+            for f in form.cleaned_data:
+                print(form.cleaned_data[f])
+                if form.cleaned_data[f] != email and form.cleaned_data[f] != phonenumber and form.cleaned_data[f] != profile_photo and form.cleaned_data[f] != sponsor and form.cleaned_data[f] != creator:
+                    form.cleaned_data[f] = form.cleaned_data[f].title()
+            member = form.save(commit=False)
+            member.creator_id = current_user.id
+            member.save()
+            return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
+        else:
+            print('Form in post is invalid')
+            print('Errors', form.errors)
+        return super().post(request, *args, **kwargs)
+    
+# Corporate Form View(CBV)
+class CorporateView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.change_corporatemember"
+    permission_denied_message = "You do not have permission to view the form page!"
+    template_name = 'corporate_member.html'
+    form_class = CorporateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            current_user = get_object_or_404(CustomUser, id=request.user.id)
+            print(current_user)
+            member = form.save(commit=False)
+            member.creator_id = current_user.id
+            member.save()
+            print('saved')
+            return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
+        else:
+            print('Errors', form.errors)
+        return super().post(request, *args, **kwargs)
         
 @login_required
 def logoutview(request):
@@ -66,52 +114,150 @@ def logoutview(request):
     return redirect(reverse_lazy('home'))
 
 # Class Based view for individual list view
-class IndividualDataBaseView(generic.ListView):
+class IndividualDataBaseView(generic.ListView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.view_individualmember"
+    permission_denied_message = "You do not have permission to view the database!"
     model = IndividualMember
     template_name = 'ind_database.html'
     context_object_name = 'members'
     ordering = 'first_name'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+    
+   
 # Class Based view for individual detail view
-class IndividualDetailView(generic.DetailView):
+class IndividualDetailView(generic.DetailView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.view_individualmember"
+    permission_denied_message = "You do not have permission to view the database!"
     model = IndividualMember
     template_name = 'ind_detail_view.html'
     context_object_name = 'member'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+    
 # Class Based view for corporate list view
-class CorporateDatabaseView(generic.ListView):
+class CorporateDatabaseView(generic.ListView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.view_corporatemember"
+    permission_denied_message = "You do not have permission to view the database!"
     model = CorporateMember
     template_name = 'cop_database.html'
     context_object_name = 'members'
     ordering = 'first_name'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+
 # Class Based view for corporate detail view
-class CorporateDetailView(generic.DetailView):
+class CorporateDetailView(generic.DetailView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = "login_view"
+    permission_required = "database.view_corporatemember"
+    permission_denied_message = "You do not have permission to view the database!"
     model = CorporateMember
     template_name = 'cop_detail_view.html'
     context_object_name = 'member'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
     
 # Class Based view for staff list view
-class StaffDatabaseView(generic.ListView):
+class StaffDatabaseView(generic.ListView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = "database.view_staff"
+    permission_denied_message = "You do not have permission to view the database!"
     model = Staff
     template_name = 'staff_database.html'
     context_object_name = 'all_staff'
     ordering = 'first_name'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+
 # Class Based View for staff detail view
-class StaffDetailView(generic.DetailView):
+class StaffDetailView(generic.DetailView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = "login_view"
+    permission_required = "database.view_staff"
+    permission_denied_message = "You do not have permission to view the database!"
     model = Staff
     template_name = 'staff_detail_view.html'
     context_object_name = 'staff'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
+
 # Class Based View for director list view
-class DirectorDatabaseView(generic.ListView):
+class DirectorDatabaseView(generic.ListView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = 'login'
+    redirect_field_name = 'login_view'
+    permission_required = 'database.view_director'
+    permission_denied_message = 'You do not have permission to view the database!'
     model = Director
     template_name = 'bod_database.html'
     context_object_name = 'directors'
+    ordering = 'first_name'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)
 
 # Class Based View for director detail view
-class DirectorDetailView(generic.DetailView):
+class DirectorDetailView(generic.DetailView, LoginRequiredMixin, PermissionRequiredMixin):
+    login_url = reverse_lazy('login')
+    redirect_field_name = 'login_view'
+    permission_required = 'database.view_director'
+    permission_denied_message = 'You do not have permission to view the database!'
     model = Director
     template_name = 'bod_detail_view.html'
     context_object_name = 'director'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(self.redirect_field_name)
+        if not request.user.has_perm(self.permission_required):
+            messages.error(request, message=self.permission_denied_message)
+            return redirect(reverse_lazy('home'))
+        return super().dispatch(request, *args, **kwargs)

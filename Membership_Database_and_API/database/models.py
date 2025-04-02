@@ -175,7 +175,7 @@ class IndividualMember(models.Model):
     def __str__(self):
         return f"{self.title} {self.first_name} {self.last_name}"
 
-# Cooperate member's model
+# Corperate member's model
 class CorporateMember(models.Model):
     first_name = models.CharField(max_length=100, error_messages=
                                  {'required': 'first_name cannot be empty!', 'max_length': 'first_name length cannot be more than 100 characters!'}, null=False, blank=False)
@@ -203,7 +203,7 @@ class CorporateMember(models.Model):
                                         {'required': 'Company Location cannot be empty!'}, null=False, blank=False)
     position_in_company = models.CharField(max_length=100, error_messages=
                                         {'required': 'Position in company cannot be empty!'}, null=False, blank=False)
-    date_of_establishment = models.IntegerField(error_messages={'required': 'Date of establishment cannot be empty!'}, null=False, blank=False)
+    date_of_establishment = models.DateField(error_messages={'required': 'Date of establishment cannot be empty!'}, null=False, blank=False)
     reg_no = models.CharField(max_length=30, unique=True, null=True, blank=True, validators=[reg_no_validator])
     profile_photo = models.ImageField(upload_to='profile_photos/', 
                                       null=True, blank=True)

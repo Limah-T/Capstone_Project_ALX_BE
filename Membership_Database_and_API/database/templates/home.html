@@ -6,7 +6,7 @@
 <!-- Hero Section -->
 {% if messages %}
 {% for message in messages %}
-<span class="alert 
+<span class="alert
     {% if message.tags == 'error' %}alert-danger
     {% else %}alert-{{ message.tags }}{% endif %}">
     {{ message }}

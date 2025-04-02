@@ -16,17 +16,7 @@
             </div>
             <h2 class="text-center mb-4">Corporate Member Registration</h2>
 
-            {% if messages %}
-            {% for message in messages %}
-                <div class="alert 
-                    {% if message.tags == 'error' %}alert-danger
-                    {% else %}alert-{{ message.tags }}{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-            {% endif %}
-
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'corporate_view' %}">
                 {% csrf_token %}
                 
                 <!-- Text Inputs (Labels Above) -->

@@ -144,7 +144,6 @@ NATIONALITIES = [
     ("Zimbabwean", "Zimbabwean"),
 ]
 
-
 NATURE_OF_BUSINESS = [
     ("Accounting & Auditing", "Accounting & Auditing"),
     ("Agriculture", "Agriculture"),
