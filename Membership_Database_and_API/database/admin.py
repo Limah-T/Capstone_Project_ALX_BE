@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Director, IndividualMember, CooperateMember, Staff
+from .models import CustomUser, Director, IndividualMember, CorporateMember, Staff
 
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
@@ -25,8 +25,8 @@ class IndividualMemberAdmin(admin.ModelAdmin):
     list_filter = ['profession']
     search_fields = ['first_name', 'last_name', 'email', 'phonenumber', 'profession']
 
-@admin.register(CooperateMember)
-class CooperateMemberAdmin(admin.ModelAdmin):
+@admin.register(CorporateMember)
+class CorporateMemberAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'email', 'phonenumber', 'company_name', 'position_in_company', 'gender', 'sponsor']
     list_filter = ['position_in_company', 'company_name']
     search_fields = ['first_name', 'last_name', 'company_name']

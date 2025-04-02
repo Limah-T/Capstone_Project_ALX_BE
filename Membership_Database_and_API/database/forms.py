@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import IndividualMember, CooperateMember
+from .models import IndividualMember, CorporateMember
 
 class LoginForm(forms.Form):
     email = forms.EmailField(error_messages={'required': 'Email field cannot be empty!', 'invalid': 'The email you entered is invalid!'})
@@ -34,7 +34,7 @@ class IndividualForm(forms.ModelForm):
 class CooperateForm(forms.ModelForm):
     date_of_establishment = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
     class Meta:
-        model = CooperateMember
+        model = CorporateMember
         fields = "__all__"
         exclude = ['is_active', 'past']
 

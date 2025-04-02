@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
-from .models import Staff, IndividualMember, CooperateMember, Director
+from .models import Staff, IndividualMember, CorporateMember, Director
 from .forms import LoginForm, IndividualForm, CooperateForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -80,14 +80,14 @@ class IndividualDetailView(generic.DetailView):
 
 # Class Based view for corporate list view
 class CorporateDatabaseView(generic.ListView):
-    model = CooperateMember
+    model = CorporateMember
     template_name = 'cop_database.html'
     context_object_name = 'members'
     ordering = 'first_name'
 
 # Class Based view for corporate detail view
 class CorporateDetailView(generic.DetailView):
-    model = CooperateMember
+    model = CorporateMember
     template_name = 'cop_detail_view.html'
     context_object_name = 'member'
     

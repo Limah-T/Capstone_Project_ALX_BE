@@ -170,12 +170,13 @@ class IndividualMember(models.Model):
     sponsor = models.ForeignKey(Director, on_delete=models.PROTECT, related_name='individual_member')
     is_active = models.BooleanField(default=True)
     past = models.BooleanField(default=False)
+    creator = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='individual_member')
 
     def __str__(self):
         return f"{self.title} {self.first_name} {self.last_name}"
 
 # Cooperate member's model
-class CooperateMember(models.Model):
+class CorporateMember(models.Model):
     first_name = models.CharField(max_length=100, error_messages=
                                  {'required': 'first_name cannot be empty!', 'max_length': 'first_name length cannot be more than 100 characters!'}, null=False, blank=False)
     last_name = models.CharField(max_length=100, error_messages=
@@ -210,6 +211,7 @@ class CooperateMember(models.Model):
     sponsor = models.ForeignKey(Director, on_delete=models.PROTECT, related_name='cooperate_member')
     is_active = models.BooleanField(default=True)
     past = models.BooleanField(default=False)
+    creator = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='corporate_member')
 
     def clean_reg_no(self):
         reg_no = self.cleaned_data['reg_no']
