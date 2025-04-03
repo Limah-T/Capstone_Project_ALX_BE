@@ -27,8 +27,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+SECURE_BROWSER_XSS_FILTER = True # Protects against XSS attacks
+SECURE_CONTENT_TYPE_NOSNIFF = True # Prevents MIME-type sniffing
+# SECURE_SSL_REDIRECT = True # Forces HTTPS (only enable after setting up SSL)
+SESSION_COOKIE_SECURE = True # Secure cookies
+CSRF_COOKIE_SECURE = True # Secure CSRF token
+X_FRAME_OPTIONS = 'DENY' # Prevents Clickjacking
 
+ALLOWED_HOSTS = []
 
 # Application definition
 
