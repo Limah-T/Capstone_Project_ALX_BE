@@ -67,7 +67,7 @@ class IndividualView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
             member = form.save(commit=False)
             member.creator_id = current_user.id
             member.save()
-            return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
+            return render(request, 'form_submission.html', {'member': member, 'creator':current_user.username.title()})
         return super().post(request, *args, **kwargs)
     
 # Corporate Form View(CBV)
