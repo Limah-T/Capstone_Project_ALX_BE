@@ -1,10 +1,12 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    # AUTHENTICATION ENDPOINTS FOR Post man
+   # AUTHENTICATION ENDPOINTS FOR POSTMAN
     path('register/', views.RegisterAPI.as_view(), name='register'),
     path('login/', views.LoginAPI.as_view(), name='login'),
+
+    # All endpoints available in listviews
     path('list-endpoints/', views.api_root),
 
     # DIRECTORS ENDPOINTS

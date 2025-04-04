@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -36,12 +35,18 @@ class LoginView(FormView):
             messages.error(self.request, 'Email or Password is Incorrect!')
         messages.error(self.request, "Invalid email address")
         return redirect(reverse_lazy('login_view'))
+    
+@login_required
+def logoutview(request):
+    logout(request)
+    print("Logged user out successfully")
+    return redirect(reverse_lazy('home'))
 
 # Individual Form View (CBV)
 class IndividualView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
     login_url = reverse_lazy('login')
     redirect_field_name = 'login_view'
-    permission_required = "database.change_individualmember"
+    permission_required = "database.change_individualmember" #edit form perm
     permission_denied_message = "You do not have permission to view the form page!"
     template_name = 'individual_member.html'
     form_class = IndividualForm
@@ -69,7 +74,7 @@ class IndividualView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
 class CorporateView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
     login_url = reverse_lazy('login')
     redirect_field_name = 'login_view'
-    permission_required = "database.change_corporatemember"
+    permission_required = "database.change_corporatemember" #edit form perm
     permission_denied_message = "You do not have permission to view the form page!"
     template_name = 'corporate_member.html'
     form_class = CorporateForm
@@ -92,12 +97,6 @@ class CorporateView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
             return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
         return super().post(request, *args, **kwargs)
         
-@login_required
-def logoutview(request):
-    logout(request)
-    print("Logged user out successfully")
-    return redirect(reverse_lazy('home'))
-
 # Class Based view for individual list view
 class IndividualDataBaseView(generic.ListView, LoginRequiredMixin, PermissionRequiredMixin):
     login_url = reverse_lazy('login')
@@ -117,7 +116,6 @@ class IndividualDataBaseView(generic.ListView, LoginRequiredMixin, PermissionReq
             return redirect(reverse_lazy('home'))
         return super().dispatch(request, *args, **kwargs)
     
-   
 # Class Based view for individual detail view
 class IndividualDetailView(generic.DetailView, LoginRequiredMixin, PermissionRequiredMixin):
     login_url = reverse_lazy('login')

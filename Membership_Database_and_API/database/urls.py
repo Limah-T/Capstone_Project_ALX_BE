@@ -26,4 +26,3 @@ urlpatterns = [
     # logout view
     path('logout', views.logoutview, name='logout_view'),
 ]
-

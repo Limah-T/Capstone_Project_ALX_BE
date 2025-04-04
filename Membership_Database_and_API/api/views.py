@@ -68,7 +68,7 @@ def api_root(request, format=None):
 class DirectorsAPIView(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = Director.objects.all().order_by('first_name')
+    queryset = Director.objects.all()
     serializer_class = DirectorSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['first_name', 'gender', 'position_in_chambers']
@@ -178,7 +178,7 @@ class CorporateMemberCreateAPIView(generics.CreateAPIView):
 class CorporateMembersAPIView(generics.ListAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = CorporateMember.objects.all().order_by('first_name')
+    queryset = CorporateMember.objects.all()
     serializer_class = CorporateReadonlySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['first_name', 'last_name', 'sponsor', 'position_in_company']
