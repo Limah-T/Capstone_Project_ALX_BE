@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+    <div class="container d-flex align-items-center justify-content-center">
+        <div class="text-center">
+            <div style="height: 300px; width: 300px;">
+                <h1 class="display-4">404</h1>
+                <p class="lead">Page Not Found</p>
+            </div>
+            
+            <p class="text-muted">Return to <a href="{% url 'home' %}" class="btn btn-primary">Home</a></p>
+        </div>
+    </div>
+{% endblock %}

@@ -11,6 +11,9 @@ from django.shortcuts import get_object_or_404
 from .models import Staff, IndividualMember, CorporateMember, Director, CustomUser
 from .forms import LoginForm, IndividualForm, CorporateForm
 
+def custom_404_page(request, exception):
+    return render(request, '404.html', status=400)
+
 def home(request):
     return render(request, 'home.html')
 
@@ -55,25 +58,11 @@ class IndividualView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            email = form.cleaned_data['email']
-            phonenumber = form.cleaned_data['phonenumber']
-            sponsor = form.cleaned_data['sponsor']
-            profile_photo = form.cleaned_data['profile_photo']
             current_user = get_object_or_404(CustomUser, id=request.user.id)
-            print(current_user)
-            form.cleaned_data['creator_id'] = current_user.id
-            creator = form.cleaned_data['creator_id']
-            for f in form.cleaned_data:
-                print(form.cleaned_data[f])
-                if form.cleaned_data[f] != email and form.cleaned_data[f] != phonenumber and form.cleaned_data[f] != profile_photo and form.cleaned_data[f] != sponsor and form.cleaned_data[f] != creator:
-                    form.cleaned_data[f] = form.cleaned_data[f].title()
             member = form.save(commit=False)
             member.creator_id = current_user.id
             member.save()
             return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
-        else:
-            print('Form in post is invalid')
-            print('Errors', form.errors)
         return super().post(request, *args, **kwargs)
     
 # Corporate Form View(CBV)
@@ -97,14 +86,10 @@ class CorporateView(FormView, LoginRequiredMixin, PermissionRequiredMixin):
         form = self.get_form()
         if form.is_valid():
             current_user = get_object_or_404(CustomUser, id=request.user.id)
-            print(current_user)
             member = form.save(commit=False)
             member.creator_id = current_user.id
             member.save()
-            print('saved')
             return render(request, 'form_submission.html', {'member': member, 'creator': current_user.username.title()})
-        else:
-            print('Errors', form.errors)
         return super().post(request, *args, **kwargs)
         
 @login_required

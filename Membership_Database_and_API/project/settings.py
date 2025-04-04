@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 SECURE_BROWSER_XSS_FILTER = True # Protects against XSS attacks
 SECURE_CONTENT_TYPE_NOSNIFF = True # Prevents MIME-type sniffing
@@ -34,7 +34,7 @@ SESSION_COOKIE_SECURE = True # Secure cookies
 CSRF_COOKIE_SECURE = True # Secure CSRF token
 X_FRAME_OPTIONS = 'DENY' # Prevents Clickjacking
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://limahtech.pythonanywhere.com/', '127.0.0.1']
 
 # Application definition
 
@@ -48,15 +48,24 @@ INSTALLED_APPS = [
     'database',
     'api',
     'rest_framework.authtoken',
+    'django_filters',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 MIDDLEWARE = [
@@ -103,6 +112,7 @@ DATABASES = {
         'PASSWORD': os.getenv('PASSWORD')   
     }
 }
+
 
 
 # Password validation
