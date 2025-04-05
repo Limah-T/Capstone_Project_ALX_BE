@@ -4,9 +4,9 @@ from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.reverse import reverse
 from rest_framework import filters
 from django.contrib.auth.hashers import make_password
@@ -56,7 +56,9 @@ class LoginAPI(APIView) :
 
 # Views to list all the endpoints
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def api_root(request, format=None):
+    print(request.user) 
     data= {
         'directors': reverse('directors', request=request, format=format),
         'individual_members': reverse('individual_members', request=request, format=format),
@@ -73,8 +75,9 @@ class DirectorsAPIView(generics.ListAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['first_name', 'gender', 'position_in_chambers']
     search_fields = ['first_name', 'last_name', 'gender', 'position_in_chambers']
-    ordering_fields = ['first_name', 'last_name','position_in_chambers']
+    ordering_fields = ['first_name', 'last_name', 'position_in_chambers']
     
+
 # Get each director with thier id/pk
 class DirectorAPIView(generics.RetrieveAPIView):
     authentication_classes = [TokenAuthentication]
@@ -105,9 +108,9 @@ class IndividualMembersAPIView(generics.ListAPIView):
     queryset = IndividualMember.objects.all()
     serializer_class = IndividualReadonlySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['first_name', 'last_name', 'gender', 'profession', 'sponsor']
-    search_fields = ['first_name', 'last_name', 'gender', 'profession', 'sponsor']
-    ordering_fields = ['first_name', 'last_name', 'profession', 'sponsor']
+    filterset_fields = ['first_name', 'last_name', 'gender', 'sponsor']
+    search_fields = ['first_name', 'last_name', 'gender', 'sponsor']
+    ordering_fields = ['first_name', 'last_name', 'sponsor']
 
 # Get each individual member with their id/pk
 class IndividualMemberAPIView(generics.RetrieveAPIView):
@@ -181,9 +184,9 @@ class CorporateMembersAPIView(generics.ListAPIView):
     queryset = CorporateMember.objects.all()
     serializer_class = CorporateReadonlySerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['first_name', 'last_name', 'sponsor', 'position_in_company']
-    search_fields = ['first_name', 'last_name', 'sponsor', 'position_in_company']
-    ordering_fields = ['first_name', 'last_name','sponsor', 'position_in_company']
+    filterset_fields = ['first_name', 'last_name','gender', 'sponsor']
+    search_fields = ['first_name', 'last_name', 'gender', 'sponsor']
+    ordering_fields = ['first_name', 'last_name', 'gender', 'sponsor']
 
 # Get each corporate member with their id/pk
 class CorporateMemberAPIView(generics.RetrieveAPIView):
